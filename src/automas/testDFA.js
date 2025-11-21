@@ -1,7 +1,7 @@
-import { DFAdefinition, DFAsimulation } from "./dfa.js";
+import { createDFA, DFAsimulation } from "./dfa.js";
 
 
-const dfa = DFAdefinition(
+const dfa = createDFA(
     ["q0", "q1"], 
     ["a", "b"],
     {

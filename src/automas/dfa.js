@@ -1,8 +1,21 @@
-export function DFAdefinition(states, alphabet, transitionFunction, startState, finalStates) {
+export function createDFA(states, alphabet, transition, startState, UfinalStates) {
+    
+    const finalStates = UfinalStates.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+    if (!states.includes(startState)) {
+        throw new Error(`Start state '${startState}' is not in the set of states`);
+    }
+
+    for (const f of finalStates) {
+        if (!states.includes(f)) {
+            throw new Error(`Final state '${f}' is not in the set of states`);
+        }
+    }
+
     return {
         states,
         alphabet,
-        transitionFunction,
+        transition,
         startState,
         finalStates
     };
@@ -15,17 +28,17 @@ export function DFAsimulation(dfa, inputString) {
     for (const symbol of inputString) {
         if(!dfa.alphabet.includes(symbol)) {
             return {
-                result: false,
+                result: "rejected",
                 trace,
                 error: `Symbol '${symbol}' not in alphabet`,
             };    
         }
 
-        const nextState = dfa.transitionFunction[currentState]?.[symbol];
+        const nextState = dfa.transition[currentState]?.[symbol];
 
         if (nextState === undefined) {
             return {
-                result: false,
+                result: "rejected",
                 trace,
                 error: `No transition defined for state '${currentState}' with symbol '${symbol}'`,
             };
@@ -38,7 +51,7 @@ export function DFAsimulation(dfa, inputString) {
     const isAccepted = dfa.finalStates.includes(currentState);
 
     return {
-        result: isAccepted? 'accepted' : 'rejected',
+        result: isAccepted? "accepted" : "rejected",
         trace,
     };    
 }
