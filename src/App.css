@@ -40,3 +40,53 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Container for dropdown */
+.menu-container {
+  position: relative;
+  display: inline-block;
+  text-align: left;
+  font-family: sans-serif;
+}
+
+/* Button that opens the menu */
+.menu-button {
+  background-color: #3b82f6; /* blue */
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Menu items container */
+.menu-items {
+  position: absolute;
+  margin-top: 4px;
+  background-color: black;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Individual item */
+.menu-item {
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Item hover/active */
+.menu-item:hover,
+.menu-item.active {
+  background-color: #3b82f6;
+  color: white;
+}
+

@@ -1,16 +1,12 @@
-export function createDFA(states, alphabet, transition, startState, UfinalStates) {
+import { parseInput, ValidStartState ,ValidFinalStates } from "../utils.js";
+
+export function createDFA(UnStates, UnAlphabet, transition, startState, UfinalStates) {
     
-    const finalStates = UfinalStates.split(',').map(s => s.trim()).filter(s => s.length > 0);
-
-    if (!states.includes(startState)) {
-        throw new Error(`Start state '${startState}' is not in the set of states`);
-    }
-
-    for (const f of finalStates) {
-        if (!states.includes(f)) {
-            throw new Error(`Final state '${f}' is not in the set of states`);
-        }
-    }
+    const states = parseInput(UnStates);
+    const alphabet = parseInput(UnAlphabet);
+    const finalStates = parseInput(UfinalStates);
+    ValidFinalStates(states, finalStates);
+    ValidStartState(states, startState);
 
     return {
         states,

@@ -1,14 +1,13 @@
-import { useState } from 'react'
-
 import './App.css'
+import { useNavigate } from 'react-router-dom';
 
-function App() {
+export default function App() {
+  const navigate = useNavigate();
 
   return (
-    <>
-      <p>Si</p>
-    </>
+    <div>
+      <h1>Automaton Simulator</h1>
+      <button type="button" onClick={() => navigate('/simulator')}>Simulator</button>
+    </div>
   )
 }
-
-export default App
