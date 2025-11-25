@@ -9,17 +9,17 @@ export default function AutomatonForm() {
   const [finalStates, setFinalStates] = useState([]);
   const [transition, setTransition] = useState({});
 
+  function updateTransition (fromState, symbol, toState) {
+    setTransition(prev => ({
+      ...prev,
+      [fromState]: {
+        ...prev[fromState],
+        [symbol]: toState
+      }
+    }));
+  }
   function GenTransitionTable({ states, alphabet, transition, onSelect }) {
 
-    function updateTransition (fromState, symbol, toState) {
-      setTransition(prev => ({
-        ...prev,
-        [fromState]: {
-          ...prev[fromState],
-          [symbol]: toState
-        }
-      }));
-    }
 
     return (
       <table>
