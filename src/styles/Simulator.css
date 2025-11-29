@@ -1,0 +1,123 @@
+.simulator-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr;
+  gap: 30px;
+  padding: 24px;
+}
+
+.sim-col {
+  background: #2d2d2d;
+  padding: 20px;
+  border-radius: 14px;
+  color: rgb(255, 255, 255);
+  min-height: 90vh;
+  box-shadow: 0 0 15px rgba(0,0,0,0.35);
+}
+
+/*Section titles*/
+.sim-col h2 {
+  text-align: center;
+  margin-bottom: 18px;
+  font-size: 200%;
+  letter-spacing: 5px;
+}
+
+/***Form***/
+.automaton-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;
+}
+
+.form-row label {
+  font-weight: bold;
+}
+
+.form-inputs input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  height: 40%;
+  margin-bottom: 10px;
+
+  white-space: nowrap;
+  overflow-x: auto;
+  text-overflow: ellipsis;
+}
+
+
+.form-row, .automaton-form {
+  width: 100%;
+}
+
+/***TransitionTable ***/
+.transition-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #2c2c2c;
+  border-radius: 10px;
+  overflow: visible;
+}
+
+.transition-table th {
+  max-width: 120px;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.transition-table td {
+  max-width: 120px;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.menu-button {
+  background: #3e3e3e;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/***GraphViewer blocks***/
+.state-block {
+  background: #2a2a2a;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.state-title {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+/***Simulation Panel***/
+.sim-output {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  color: #ddd;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+button {
+  background: #4f8cff;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background: #6aa2ff;
+}

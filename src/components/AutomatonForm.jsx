@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import "../styles/AutomatonForm.css";
 
-export default function AutomatonForm() {
+export default function AutomatonForm({ onBuild }) {
   const [states, setStates] = useState([]);
   const [alphabet, setAlphabet] = useState([]);
   const [startState, setStartState] = useState("");
   const [finalStates, setFinalStates] = useState([]);
   const [transition, setTransition] = useState({});
-  const [mode, setMode] = useState("DFA")
+  const [mode, setMode] = useState("DFA");
 
   function updateTransition(fromState, symbol, toState) {
     setTransition(prev => {
@@ -36,8 +36,8 @@ export default function AutomatonForm() {
         }
       };
     });
+    onBuild(null);
   }
-
 
   function GenTransitionTable({ states, alphabet, transition, onSelect, mode }) {
     return (
@@ -62,7 +62,8 @@ export default function AutomatonForm() {
                         mode === "DFA"
                           ? (transition[state]?.[symbol] || "Select")
                           : (Array.isArray(transition[state]?.[symbol])
-                            ? transition[state][symbol].join(", ") : "Select")
+                              ? transition[state][symbol].join(", ")
+                              : "Select")
                       }
                     </MenuButton>
                     <MenuItems className="menu-items">
@@ -97,11 +98,9 @@ export default function AutomatonForm() {
       startState,
       finalStates,
       transition
-    }
+    };
 
-    console.log("AUTOMATON:", automaton);
-
-    alert("Automaton built! Check the console.");
+    onBuild(automaton);
   }
 
   return (
@@ -115,6 +114,7 @@ export default function AutomatonForm() {
             onChange={(e) => {
               setMode(e.target.value);
               setTransition({});
+              onBuild(null);
             }}>
             <option value="DFA">DFA</option>
             <option value="NFA">NFA</option>
@@ -123,9 +123,7 @@ export default function AutomatonForm() {
         <div>
           <button onClick={submitForm}>Build</button>
         </div>
-        
       </div>
-      
 
       <div className="form-inputs">    
         <div className="form-row">           
@@ -133,39 +131,48 @@ export default function AutomatonForm() {
             <label>States</label>
             <input 
               type="text" 
-              name="states" 
-              onChange={(e) => setStates(e.target.value.split(',').map(s => s.trim()))}
+              onChange={(e) => {
+                setStates(e.target.value.split(',').map(s => s.trim()));
+                onBuild(null);
+              }}
             />
           </div>      
           <div>
             <label>Alphabet</label>
             <input 
               type="text" 
-              name="alphabet" 
-              onChange={(e) => setAlphabet(e.target.value.split(',').map(s => s.trim()))}
+              onChange={(e) => {
+                setAlphabet(e.target.value.split(',').map(s => s.trim()));
+                onBuild(null);
+              }}
             />
           </div>
         </div>
+
         <div className="form-row">
           <div>
             <label>Start State</label>
             <input 
-              type="text" 
-              name="start-state" 
-              onChange={(e) => setStartState(e.target.value.trim())}
+              type="text"
+              onChange={(e) => {
+                setStartState(e.target.value.trim());
+                onBuild(null);
+              }}
             />
           </div>      
           <div>
             <label>Final State</label>
             <input 
-              type="text" 
-              name="final-state" 
-              onChange={(e) => setFinalStates(e.target.value.split(",").map(s => s.trim()))}
+              type="text"
+              onChange={(e) => {
+                setFinalStates(e.target.value.split(',').map(s => s.trim()));
+                onBuild(null);
+              }}
             />
           </div>
         </div>   
       </div>
-      
+
       {states.length > 0 && alphabet.length > 0 && (
         <div className="transition-table">
           <label>Transition Function</label>
@@ -175,10 +182,10 @@ export default function AutomatonForm() {
             transition={transition}
             onSelect={updateTransition}
             mode={mode}
-            />  
-        </div> 
-      ) }
-            
+          />  
+        </div>
+      )}
+
     </div>
   );
 }
