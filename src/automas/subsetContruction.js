@@ -1,132 +1,108 @@
-import { parseInput, ValidStartState ,ValidFinalStates } from "../utils.js";
-
+// src/automas/subsetConstruction.js
 
 const EPS = "eps";
 
-export function createNFA(UnStates, UnAlphabet, transition, startState, UfinalStates) {
+// Epsilon-closure of a set of NFA states
+function epsilonClosure(stateSet, transition) {
+  const stack = [...stateSet];
+  const closure = new Set(stateSet);
 
-    const states = parseInput(UnStates);
-    const alphabet = parseInput(UnAlphabet);
-    const finalStates = parseInput(UfinalStates);
-    ValidFinalStates(states, finalStates);
-    ValidStartState(states, startState);
-
-    return {
-        states,
-        alphabet,
-        transition,
-        startState,
-        finalStates
-    };
+  while (stack.length) {
+    const s = stack.pop();
+    const epsList = (transition[s] && transition[s][EPS]) || [];
+    for (const t of epsList) {
+      if (!closure.has(t)) {
+        closure.add(t);
+        stack.push(t);
+      }
+    }
+  }
+  return closure;
 }
 
-function epsilonClosure(stateSet, transition) {
-    const stack = [...stateSet];
-    const closure = new Set(stateSet);
-
-    while (stack.length) {
-        const s = stack.pop();
-        const epsList = (transition[s] && transition[s][EPS]) || [];
-        for (const t of epsList) {
-            if (!closure.has(t)){
-            closure.add(t);
-            stack.push(t);
-        }
-        }
+// Move from a set of states with a symbol
+function move(stateSet, symbol, transition) {
+  const result = new Set();
+  for (const s of stateSet) {
+    const targets = (transition[s] && transition[s][symbol]) || [];
+    for (const t of targets) {
+      result.add(t);
     }
-    return closure;
-    }
+  }
+  return result;
+}
 
-function move(states, symbol, transition) {
-    const toStates = new Set(); //possible states that can be moved to given a symbol
+// Canonical key for a subset (for Map)
+function subsetKey(set) {
+  return [...set].sort().join(",");
+}
 
-    // for each state in states
-    for (const state of states) {
-        if (transition[state]) {
-            const movesTo = transition[state][symbol] || [];
-
-            for (const state of movesTo ) {
-                toStates.add(state);
-            }
-        }
-    }
-
-    return toStates;
+// Human-readable name for a subset (what the DFA state is called)
+function subsetName(set) {
+  if (set.size === 0) return "∅";
+  return [...set].sort().join("_"); // e.g. q1_q2_q3
 }
 
 export default function subsetConstruction(nfa) {
-    const dfaStates = new Map(); //what in a nfa is hold as multiple states such as from state A with input 0 we can move to 'B, C' will be hold here as a single state where from state A we can move to the next state where B = [B, C]
-    const dfaTransitionFunct = {};
-    const newStates = [];
+  const { alphabet, transition, startState, finalStates } = nfa;
 
+  // Map: key (sorted subset string) -> DFA state name, e.g. "q1,q2" -> "q1_q2"
+  const subsetToName = new Map();
+  const queue = [];
 
-    // ID generetation for mapping
-    let stateCount = 0;
+  const dfaTransitions = {};
 
-    const getStateId = () => {
-        const id = String.fromCharCode(65 + stateCount);
-        stateCount++;
-        return id;
-    };
+  // --- Start subset ---
+  const startSet = epsilonClosure(new Set([startState]), transition);
+  const startKey = subsetKey(startSet);
+  const startName = subsetName(startSet);
 
-    const nfaStartState = new Set([nfa.startState]);
-    const dfaStartState = epsilonClosure(nfaStartState, nfa.transition);
+  subsetToName.set(startKey, startName);
+  queue.push(startSet);
 
-    const dfaStartId = getStateId();
-    dfaStates.set(dfaStartState, dfaStartId);
-    newStates.push(dfaStartState);
+  // --- BFS over subsets ---
+  while (queue.length > 0) {
+    const currentSet = queue.shift();
+    const currentKey = subsetKey(currentSet);
+    const currentName = subsetToName.get(currentKey);
 
+    dfaTransitions[currentName] = {};
 
-    // Transition generation
-    while (newStates.length > 0) {
-        const current = newStates.shift();
-        const currentID = dfaStates.get(current);
+    for (const symbol of alphabet) {
+      const moved = move(currentSet, symbol, transition);
+      const nextSet = epsilonClosure(moved, transition);
+      const nextKey = subsetKey(nextSet);
+      const nextName = subsetName(nextSet);
 
-        dfaTransitionFunct[currentID] = {};
+      // If this subset hasn't been seen before, register it and enqueue
+      if (!subsetToName.has(nextKey)) {
+        subsetToName.set(nextKey, nextName);
+        queue.push(nextSet);
+      }
 
-        for (const symbol of nfa.alphabet) {
-            const movesTo = move(current, symbol, nfa.transition);
-
-            const next = epsilonClosure(movesTo, nfa.transition);
-
-            let nextID;
-
-            //Check if key/entry is already on the map
-            const isEntry = Array.from(dfaStates.keys()).find(
-                set => 
-                    set.size === next.size && [...set].every(val => next.has(val))
-            );
-
-            if (isEntry) {
-                nextID = dfaStates.get(isEntry)
-            } else {
-                nextID = getStateId();
-                dfaStates.set(next, nextID);
-                newStates.push(next);
-            }
-
-            dfaTransitionFunct[currentID][symbol] = nextID; 
-        }
+      dfaTransitions[currentName][symbol] = nextName;
     }
+  }
 
-    const dfaFinalStates =  new Set();
+  // --- Collect DFA states ---
+  const dfaStates = [...subsetToName.values()];
 
-    for (const [nfaSet, dfaID] of dfaStates.entries()) {
-        for (const nfaState of nfaSet) {
-            if (nfa.finalStates.includes(nfaState)) {
-                dfaFinalStates.add(dfaID);
-                break;
-            }
-        }
+  // --- DFA final states: any subset containing an NFA final state ---
+  const dfaFinalStates = [];
+  for (const [key, name] of subsetToName.entries()) {
+    if (name === "∅") continue;
+    const subsetStates = key.split(",");
+    if (subsetStates.some((s) => finalStates.includes(s))) {
+      dfaFinalStates.push(name);
     }
+  }
 
-    return {
-
-        states: Array.from(dfaStates.values()),
-        alphabet: nfa.alphabet,
-        transition: dfaTransitionFunct,
-        startState: dfaStartId,
-        finalStates: Array.from(dfaFinalStates)
-    };
-
+  return {
+    mode: "DFA",              // so GraphViewer shows "DFA Visualization"
+    states: dfaStates,        // ["q1", "q1_q2", ...] based on USER states
+    alphabet,                 // same alphabet user entered
+    transition: dfaTransitions,
+    startState: startName,
+    finalStates: dfaFinalStates,
+  };
 }

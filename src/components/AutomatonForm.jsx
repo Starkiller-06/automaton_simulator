@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import "../styles/AutomatonForm.css";
+import { createNFA } from "../automas/nfa.js";
+import { createDFA } from "../automas/dfa.js";
+
 
 export default function AutomatonForm({ onBuild }) {
   const [states, setStates] = useState([]);
@@ -91,17 +94,31 @@ export default function AutomatonForm({ onBuild }) {
   }
 
   function submitForm() {
-    const automaton = {
-      mode,
+  let automaton = null;
+
+  if (mode === "NFA") {
+    automaton = createNFA(
       states,
       alphabet,
+      transition,
       startState,
-      finalStates,
-      transition
-    };
-
-    onBuild(automaton);
+      finalStates.join(",")
+    );
+  } else {
+    automaton = createDFA(
+      states,
+      alphabet,
+      transition,
+      startState,
+      finalStates.join(",")
+    );
   }
+
+  automaton.mode = mode; 
+  onBuild(automaton);
+}
+
+
 
   return (
     <div className="automaton-form">

@@ -58,6 +58,11 @@
 }
 
 /***TransitionTable ***/
+.transition-table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
 .transition-table table {
   width: 100%;
   border-collapse: collapse;
@@ -121,3 +126,52 @@ button {
 button:hover {
   background: #6aa2ff;
 }
+
+/***Converter button***/
+
+.convert-btn {
+  margin-top: 1rem;
+  padding: 8px 14px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.convert-btn:hover {
+  background: #2563eb;
+}
+
+/***Transition Table for Converter***/
+
+/* Transition Table */
+.tt-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.tt-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1f1f1f;
+  color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tt-header {
+  background: #2c2c2c;
+  padding: 8px 12px;
+  border: 1px solid #333;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tt-cell {
+  padding: 8px 12px;
+  border: 1px solid #333;
+  text-align: center;
+}
+
