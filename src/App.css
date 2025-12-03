@@ -39,25 +39,7 @@
 
 .read-the-docs {
   color: #888;
-}
-
-/* Container for dropdown */
-.menu-container {
-  position: relative;
-  display: inline-block;
-  text-align: left;
-  font-family: sans-serif;
-}
-
-/* Button that opens the menu */
-.menu-button {
-  background-color: #3b82f6; /* blue */
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
+} 
 
 /* Menu items container */
 .menu-items {
@@ -86,7 +68,7 @@
 /* Item hover/active */
 .menu-item:hover,
 .menu-item.active {
-  background-color: #3b82f6;
+  background-color: #B19EEF;
   color: white;
 }
 

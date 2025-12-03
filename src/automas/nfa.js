@@ -1,20 +1,17 @@
+import { parseInput, ValidStartState, ValidFinalStates } from "../utils.js";
+    
     const EPS = "eps";
 
-    export function createNFA(states, alphabet, transition, startState, UfinalStates) {
+    export function createNFA(unStates, unAlphabet, transition, startState, unFinalStates) {
 
-        const finalStates = UfinalStates.split(',').map(s => s.trim()).filter(s => s.length > 0);
-        
-        if (!states.includes(startState)) {
-            throw new Error(`Start state '${startState}' is not in the set of states`);
-        }
-
-        for (const f of finalStates) {
-            if (!states.includes(f)) {
-                throw new Error(`Final state '${f}' is not in the set of states`);
-            }
-        }
+        const states = parseInput(unStates);
+        const alphabet = parseInput(unAlphabet);
+        const finalStates = parseInput(unFinalStates);
+        ValidFinalStates(states, finalStates);
+        ValidStartState(states, startState);
 
         return {
+            mode: "NFA",
             states, 
             alphabet, 
             transition, 
@@ -61,17 +58,18 @@
 
     for (const ch of inputString) {
         if (!nfa.alphabet.includes(ch)) {
-        return{
-            result: "rejected",
-            trace: [],
-            reason: `Invalid symbol '${ch}'`,
-        };
+            return{
+                result: "rejected",
+                trace: [],
+                reason: `Invalid symbol '${ch}'`,
+            };
         }
     }
 
     let current = epsilonClosure(new
         Set([nfa.startState]), nfa.transition);
         const trace = [];
+
         if(showTrace)
         trace.push(setToSortedArray(current));
 

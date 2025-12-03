@@ -1,7 +1,7 @@
 export function parseInput(inputString) {
-    const input = inputString.split(',').map(s => s.trim()).filter(s => s.length > 0);
-
-    return input;
+  if (!inputString) return [];
+  if (Array.isArray(inputString)) return inputString;
+  return inputString.split(',').map(s => s.trim()).filter(s => s.length > 0);
 }
     
 export function ValidStartState(states, startState) {

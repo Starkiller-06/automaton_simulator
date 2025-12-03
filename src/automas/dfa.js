@@ -1,14 +1,15 @@
 import { parseInput, ValidStartState ,ValidFinalStates } from "../utils.js";
 
-export function createDFA(UnStates, UnAlphabet, transition, startState, UfinalStates) {
+export function createDFA(unStates, unAlphabet, transition, startState, unfinalStates) {
     
-    const states = parseInput(UnStates);
-    const alphabet = parseInput(UnAlphabet);
-    const finalStates = parseInput(UfinalStates);
+    const states = parseInput(unStates);
+    const alphabet = parseInput(unAlphabet);
+    const finalStates = parseInput(unfinalStates);
     ValidFinalStates(states, finalStates);
     ValidStartState(states, startState);
 
     return {
+        mode: "NFA",
         states,
         alphabet,
         transition,

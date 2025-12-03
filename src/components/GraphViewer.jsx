@@ -1,13 +1,11 @@
 import React from "react";
-import "../styles/GraphViewer.css";
+import "../styles/GraphViewer.css"; // CSS Import
 
 export default function GraphViewer({ automaton }) {
   if (!automaton) {
     return (
-      <div className="state-block">
-        <p style={{ textAlign: "center", opacity: 0.8 }}>
-          Waiting for automaton...
-        </p>
+      <div style={{ textAlign: "center", color: "#6b7280", marginTop: "20%" }}>
+        Waiting for automaton...
       </div>
     );
   }
@@ -16,35 +14,35 @@ export default function GraphViewer({ automaton }) {
 
   return (
     <div className="graph-container">
-      <h3>{mode} Visualization</h3>
-
-      <div className="graph-info">
-        <p><strong>Start State:</strong> {startState}</p>
-        <p><strong>Final States:</strong> {finalStates.join(", ")}</p>
+      <div className="graph-info-bar">
+        <div><span className="info-label">Start:</span> <span className="info-val start">{startState}</span></div>
+        <div><span className="info-label">Final:</span> <span className="info-val final">{finalStates.join(", ")}</span></div>
+        <div className="badge">{mode}</div>
       </div>
 
-      <div className="graph-block">
+      <div className="nodes-grid">
         {states.map((state) => (
-          <div key={state} className="state-block">
-            <h4 className="state-title">
-              {state}
-              {state === startState ? " (Start)" : ""}
-              {finalStates.includes(state) ? " (Final)" : ""}
-            </h4>
-
-            <ul style={{ margin: 0, paddingLeft: "16px" }}>
+          <div key={state} className={`node-card ${finalStates.includes(state) ? 'is-final' : ''}`}>
+            <div className="node-header">
+              <span className="node-title" title={state}>{state}</span>
+              <div className="node-badges">
+                {state === startState && <span className="tag start">Start</span>}
+                {finalStates.includes(state) && <span className="tag final">Final</span>}
+              </div>
+            </div>
+            
+            <ul className="transition-list">
               {alphabet.map((symbol) => {
                 const target = transition[state]?.[symbol];
-
-                if (!target) {
-                  return <li key={symbol}>{symbol}: —</li>;
-                }
-
-                const targets = Array.isArray(target)
-                  ? target.join(", ")
-                  : target;
-
-                return <li key={symbol}>{symbol}: {targets}</li>;
+                if (!target || (Array.isArray(target) && target.length === 0)) return null;
+                
+                const display = Array.isArray(target) ? target.join(", ") : target;
+                return (
+                  <li key={symbol} className="transition-item">
+                    <span className="symbol-key">{symbol}</span>
+                    <span className="target-val" title={display}>→ {display}</span>
+                  </li>
+                );
               })}
             </ul>
           </div>

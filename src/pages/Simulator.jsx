@@ -1,78 +1,98 @@
 import React, { useState } from "react";
-import AutomatonForm from "../components/AutomatonForm.jsx";
-import GraphViewer from "../components/GraphViewer.jsx";
-import SimulationPanel from "../components/SimulationPanel.jsx";
-import subsetConstruction from "../automas/subsetContruction.js"; 
-import TransitionTable from "../components/TransitionTable.jsx";
-
-// ../automas/nfa.js
-import "../styles/Simulator.css";
+import AutomatonForm from "../components/AutomatonForm";
+import GraphViewer from "../components/GraphViewer";
+import SimulationPanel from "../components/SimulationPanel";
+import TransitionTable from "../components/TransitionTable";
+import subsetConstruction from "../automas/subsetConstruction";
+import "../styles/Simulator.css"; // Main CSS layout
 
 export default function Simulator() {
   const [automaton, setAutomaton] = useState(null);
   const [convertedDFA, setConvertedDFA] = useState(null);
 
+  const handleBuild = (newAutomaton) => {
+    setAutomaton(newAutomaton);
+    setConvertedDFA(null);
+  };
+
+  const handleConvert = () => {
+    if (!automaton) return;
+    try {
+      const dfa = subsetConstruction(automaton);
+      setConvertedDFA(dfa);
+    } catch(e) {
+      alert("Conversion Error: " + e.message);
+    }
+  };
+
   return (
-    <div className="simulator-grid">
+    <div className="simulator-page">
+      <h1 className="simulator-title">
+        NFA/DFA Simulator
+      </h1>
       
-      {/* Left Column */}
-      <div className="sim-col">
-        <h2>Automaton Builder</h2>
-        <AutomatonForm 
-          onBuild={(a) => {
-            setAutomaton(a);
-            setConvertedDFA(null); // reset DFA if user builds a new machine
-          }} 
-        />
-      </div>
-
-      {/* Middle Column - Visualization */}
-      <div className="sim-col">
-        <h2>Automaton Visualization</h2>
+      <div className="simulator-grid">
         
-        <GraphViewer automaton={automaton} />
+        {/* CONTAINER 1: Form (Left) */}
+        <div className="panel">
+          <div className="panel-header">
+            <span className="panel-number">1</span>
+            <h2 className="panel-title">Builder</h2>
+          </div>
+          <div className="panel-content">
+            <AutomatonForm onBuild={handleBuild} />
+          </div>
+        </div>
 
-        {automaton && (
-          <button 
-            className="convert-btn"
-            onClick={() => {
-              const dfa = subsetConstruction(automaton);
-              setConvertedDFA(dfa);
-            }}
-          >
-            Convert NFA to DFA
-          </button>
-        )}
+        {/* CONTAINER 2: Viz (Middle) */}
+        <div className="panel" style={{ position: 'relative' }}>
+          <div className="panel-header">
+            <span className="panel-number">2</span>
+            <h2 className="panel-title">Visualization</h2>
+          </div>
+          <div className="panel-content">
+            <GraphViewer automaton={automaton} />
+          </div>
+          
+          {/* Conversion Button Docked at Bottom of Viz */}
+          {automaton && !convertedDFA && automaton.mode === "NFA" && (
+            <div className="viz-footer">
+              <button onClick={handleConvert} className="btn-convert">
+                Convert NFA to DFA
+              </button>
+            </div>
+          )}
+        </div>
 
-        {convertedDFA && (
-          <>
-            <h3 style={{ marginTop: "1rem" }}>Converted DFA</h3>
+        {/* Right Column */}
+        <div className="right-column">
+          
+          {/* CONTAINER 4: Sim (Top Right) */}
+          <div className="panel sim-panel-wrapper">
+            <div className="panel-header">
+              <span className="panel-number">4</span>
+              <h2 className="panel-title">Simulation</h2>
+            </div>
+            <div className="panel-content">
+              <SimulationPanel automaton={convertedDFA || automaton} />
+            </div>
+          </div>
 
-            {/* Transition Table */}
-            <h4>Transition Table</h4>
-            <TransitionTable automaton={convertedDFA} />
-
-          </>
-)}
+          {/* CONTAINER 3: Table (Bottom Right) */}
+          {convertedDFA && (
+            <div className="panel table-panel-wrapper">
+              <div className="panel-header">
+                <span className="panel-number">3</span>
+                <h2 className="panel-title">Transition Table (DFA)</h2>
+              </div>
+              <div className="panel-content">
+                <TransitionTable automaton={convertedDFA} />
+              </div>
+            </div>
+          )}
+        </div>
 
       </div>
-
-      {/* Right Column - Simulation */}
-      <div className="sim-col">
-        <h2>Simulation</h2>
-
-        {!convertedDFA && (
-          <SimulationPanel automaton={automaton} />
-        )}
-
-        {convertedDFA && (
-          <>
-            <h3>DFA Simulation</h3>
-            <SimulationPanel automaton={convertedDFA} />
-          </>
-        )}
-      </div>
-
     </div>
   );
 }

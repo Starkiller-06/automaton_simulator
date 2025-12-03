@@ -1,31 +1,27 @@
 import React from "react";
+// Uses Simulator.css classes
 
 export default function TransitionTable({ automaton }) {
   if (!automaton) return null;
-
   const { states, alphabet, transition } = automaton;
 
   return (
-    <div className="tt-container">
-      <table className="tt-table">
+    <div className="table-container">
+      <table className="standard-table">
         <thead>
           <tr>
-            <th className="tt-header">State</th>
-            {alphabet.map((symbol) => (
-              <th className="tt-header" key={symbol}>{symbol}</th>
-            ))}
+            <th>State</th>
+            {alphabet.map(sym => <th key={sym}>{sym}</th>)}
           </tr>
         </thead>
-
         <tbody>
-          {states.map((state) => (
+          {states.map(state => (
             <tr key={state}>
-              <td className="tt-cell">{state}</td>
-              {alphabet.map((symbol) => {
-                const to = transition[state]?.[symbol];
-                const formatted =
-                  Array.isArray(to) ? to.join(", ") : to || "—";
-                return <td className="tt-cell" key={symbol}>{formatted}</td>;
+              <td className="cell-highlight">{state}</td>
+              {alphabet.map(sym => {
+                const target = transition[state]?.[sym];
+                const display = Array.isArray(target) ? `{${target.join(",")}}` : (target || "∅");
+                return <td key={sym}>{display}</td>
               })}
             </tr>
           ))}

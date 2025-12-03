@@ -1,123 +1,239 @@
-.simulator-grid {
-  display: grid;
-  grid-template-columns: 2fr 2fr 2fr;
-  gap: 30px;
-  padding: 24px;
+:root {
+  --bg-dark: #25212E;
+  --panel-bg: #2b2d35;
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --accent: #B19EEF;
+  --accent-hover: #CEC2F5;
+  --border-color: #4b5563;
+  --success: #16a34a;
+  --error: #dc2626;
 }
 
-.sim-col {
-  background: #2d2d2d;
-  padding: 20px;
-  border-radius: 14px;
-  color: rgb(255, 255, 255);
-  min-height: 90vh;
-  box-shadow: 0 0 15px rgba(0,0,0,0.35);
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: visible; /* Prevent body scroll, handle in containers */
 }
 
-/*Section titles*/
-.sim-col h2 {
-  text-align: center;
-  margin-bottom: 18px;
-  font-size: 200%;
-  letter-spacing: 5px;
-}
-
-/***Form***/
-.automaton-form {
+/* Page Layout */
+.simulator-page {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  overflow: hidden;
 }
 
-.form-row {
-  display: flex;
-  flex-direction: column; 
-  gap: 10px;
-}
-
-.form-row label {
-  font-weight: bold;
-}
-
-.form-inputs input {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+.simulator-title {
   text-align: center;
-  height: 40%;
-  margin-bottom: 10px;
-
-  white-space: nowrap;
-  overflow-x: auto;
-  text-overflow: ellipsis;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  margin: 0;
 }
 
-
-.form-row, .automaton-form {
-  width: 100%;
-}
-
-/***TransitionTable ***/
-.transition-table table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #2c2c2c;
-  border-radius: 10px;
+.simulator-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 350px 1fr 350px;
+  gap: 1.25rem;
+  padding: 1.25rem;
   overflow: visible;
 }
 
-.transition-table th {
-  max-width: 120px;
-  overflow-x: auto;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+/* Panel Common Styles */
+.panel {
+  background-color: var(--panel-bg);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #374151;
+  overflow: visible;
 }
 
-.transition-table td {
-  max-width: 120px;
-  overflow-x: auto;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.panel-header {
+  padding: 1rem;
+  border-bottom: 1px solid #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(30, 30, 36, 0.3);
 }
 
-.menu-button {
-  background: #3e3e3e;
+.panel-number {
+  background-color: #374151;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #d1d5db;
+}
+
+.panel-title {
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.panel-content {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Scrollbar styling */
+.panel-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.panel-content::-webkit-scrollbar-track {
+  background: var(--panel-bg);
+}
+.panel-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+/* Right Column Layout */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+.sim-panel-wrapper {
+  flex: 0 0 auto;
+  max-height: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-panel-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* General Simulation Panel Styles (used in SimulationPanel.jsx) */
+.sim-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sim-input {
+  flex: 1;
+  background-color: #374151;
+  border: 1px solid var(--border-color);
   color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
-/***GraphViewer blocks***/
-.state-block {
-  background: #2a2a2a;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-}
-
-.state-title {
-  font-size: 1.1rem;
-  margin-bottom: 6px;
-}
-
-/***Simulation Panel***/
-.sim-output {
-  background: #ffffff;
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 12px;
-  color: #ddd;
-  font-family: monospace;
-  white-space: pre-wrap;
-}
-
-button {
-  background: #4f8cff;
-  padding: 6px 10px;
+.btn-run {
+  background-color: var(--success);
+  color: white;
   border: none;
-  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
   cursor: pointer;
 }
-button:hover {
-  background: #6aa2ff;
+.btn-run:hover {
+  background-color: #15803d;
+}
+
+.sim-result-box {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.sim-result-box.accepted {
+  background-color: rgba(22, 163, 74, 0.2);
+  border-color: var(--success);
+}
+.sim-result-box.rejected {
+  background-color: rgba(220, 38, 38, 0.2);
+  border-color: var(--error);
+}
+
+.result-status {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+}
+
+.sim-trace {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.trace-step {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.trace-val {
+  font-family: monospace;
+  background-color: #1f2937;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #374151;
+}
+
+/* Table Styles (used in TransitionTable.jsx) */
+.standard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.standard-table th {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  color: #d1d5db;
+  position: sticky;
+  top: 0;
+  background-color: #1f2937; 
+}
+
+.standard-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #374151;
+  font-family: monospace;
+  color: #d1d5db;
+}
+
+.cell-highlight {
+  color: #93c5fd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .simulator-grid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .simulator-page {
+    height: auto;
+    overflow-y: auto;
+  }
+  .right-column {
+    height: auto;
+  }
 }
