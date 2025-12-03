@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
   --bg-dark: #25212E;
   --panel-bg: #2b2d35;
@@ -12,10 +14,9 @@
 
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Roboto';
   background-color: var(--bg-dark);
   color: var(--text-main);
-  overflow: visible; /* Prevent body scroll, handle in containers */
 }
 
 /* Page Layout */
@@ -23,7 +24,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .simulator-title {
@@ -40,7 +41,7 @@ body {
 .simulator-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: 350px 1fr 350px;
+  grid-template-columns: 380px 350px 380px;
   gap: 1.25rem;
   padding: 1.25rem;
   overflow: visible;
@@ -126,7 +127,6 @@ body {
   min-height: 0;
 }
 
-/* General Simulation Panel Styles (used in SimulationPanel.jsx) */
 .sim-controls {
   display: flex;
   gap: 0.5rem;
@@ -196,7 +196,6 @@ body {
   border: 1px solid #374151;
 }
 
-/* Table Styles (used in TransitionTable.jsx) */
 .standard-table {
   width: 100%;
   border-collapse: collapse;
@@ -223,7 +222,6 @@ body {
   color: #93c5fd;
 }
 
-/* Responsive adjustments */
 @media (max-width: 1024px) {
   .simulator-grid {
     grid-template-columns: 1fr;
