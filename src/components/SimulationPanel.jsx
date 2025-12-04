@@ -11,6 +11,7 @@ export default function SimulationPanel({ automaton }) {
   }
 
   const run = () => {
+    console.log(automaton)
     let res;
     if (automaton.mode === "DFA") {
       res = DFAsimulation(automaton, input);

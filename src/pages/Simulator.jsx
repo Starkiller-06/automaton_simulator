@@ -4,7 +4,7 @@ import GraphViewer from "../components/GraphViewer";
 import SimulationPanel from "../components/SimulationPanel";
 import TransitionTable from "../components/TransitionTable";
 import subsetConstruction from "../automas/subsetConstruction";
-import "../styles/Simulator.css"; // Main CSS layout
+import "../styles/Simulator.css"; 
 
 export default function Simulator() {
   const [automaton, setAutomaton] = useState(null);

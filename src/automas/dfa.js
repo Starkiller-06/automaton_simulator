@@ -1,7 +1,7 @@
 import { parseInput, ValidStartState ,ValidFinalStates } from "../utils.js";
 
+//DFA Formal Definition
 export function createDFA(unStates, unAlphabet, transition, startState, unfinalStates) {
-    
     const states = parseInput(unStates);
     const alphabet = parseInput(unAlphabet);
     const finalStates = parseInput(unfinalStates);
@@ -9,7 +9,7 @@ export function createDFA(unStates, unAlphabet, transition, startState, unfinalS
     ValidStartState(states, startState);
 
     return {
-        mode: "NFA",
+        mode: "DFA", //Used in frontend to toggle mode 
         states,
         alphabet,
         transition,
@@ -21,7 +21,9 @@ export function createDFA(unStates, unAlphabet, transition, startState, unfinalS
 export function DFAsimulation(dfa, inputString) {
     let currentState = dfa.startState;
     const trace = [currentState];
+    console.log(dfa, inputString)
 
+    //Check if each symbol in the input string belongs to the DFA alphabet
     for (const symbol of inputString) {
         if(!dfa.alphabet.includes(symbol)) {
             return {
@@ -31,7 +33,9 @@ export function DFAsimulation(dfa, inputString) {
             };    
         }
 
-        const nextState = dfa.transition[currentState]?.[symbol];
+        // Get the next state according to the transition function
+        // If no transition exists for (currentState, symbol), nextState will be undefined
+        const nextState = dfa.transition[currentState]?.[symbol]; 
 
         if (nextState === undefined) {
             return {
@@ -42,10 +46,10 @@ export function DFAsimulation(dfa, inputString) {
         }
 
         currentState = nextState;
-        trace.push(currentState);
+        trace.push(currentState); //Add new current state to trace
     }
 
-    const isAccepted = dfa.finalStates.includes(currentState);
+    const isAccepted = dfa.finalStates.includes(currentState); // Accept if the final state is one of the DFA's accepting states
 
     return {
         result: isAccepted? "accepted" : "rejected",
