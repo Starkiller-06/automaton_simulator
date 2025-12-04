@@ -10,11 +10,11 @@ export function createDFA(unStates, unAlphabet, transition, startState, unfinalS
 
     return {
         mode: "DFA", //Used in frontend to toggle mode 
-        states,
-        alphabet,
-        transition,
-        startState,
-        finalStates
+        states, //Array of state names (strings)
+        alphabet, // Array of symbols
+        transition, // Nested dictionary defining transitions
+        startState, // Single start state
+        finalStates // Array of accepting states
     };
 }
 
