@@ -57,3 +57,26 @@ export function DFAsimulation(dfa, inputString) {
     };    
 }
 
+/*
+srx
+    assets
+    automatas
+        dfa.js
+        nfa.js
+        subsetConstruction.js
+        testDFA.js
+        testNFA.js
+    components
+        automatonForm.jsx
+        GraphVisualizer.jsx
+        SimulationPanel.jsx
+        TransitionTable.jsx
+    pages
+        Simulator.jsx
+    styles
+    App.js
+    Apss.css
+    main.jsx
+    utils.js
+
+*/
